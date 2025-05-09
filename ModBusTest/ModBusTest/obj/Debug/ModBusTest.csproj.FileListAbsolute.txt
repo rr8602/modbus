@@ -1,0 +1,15 @@
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\ModBusTest.exe.config
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\ModBusTest.exe
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\ModBusTest.pdb
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\INIFileParser.dll
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\NModbus4.dll
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\INIFileParser.xml
+C:\Modbus\ModBusTest\ModBusTest\bin\Debug\NModbus4.xml
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.csproj.AssemblyReference.cache
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.main_form.resources
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.Properties.Resources.resources
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.csproj.GenerateResource.cache
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.csproj.CoreCompileInputs.cache
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.csproj.Up2Date
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.exe
+C:\Modbus\ModBusTest\ModBusTest\obj\Debug\ModBusTest.pdb
