@@ -36,7 +36,7 @@ namespace ModbusServer
         }
 
         // INI 파일에서 설정 로드
-        public static CommSettings LoadSettings(string iniFilePath = "C:\\Modbus\\ModBusTest\\ModBusTest\\agent_config.ini")
+        public static CommSettings LoadSettings(string iniFilePath = "E:\\modbus\\ModBusTest\\ModbusTest\\agent_config.ini")
         {
             CommSettings settings = new CommSettings();
 
@@ -109,7 +109,7 @@ namespace ModbusServer
         }
 
         // 간편하게 INI 파일에서 설정을 로드하고 데이터 전송
-        public static void SendDataWithIniSettings(byte[] data, string iniFilePath = "C:\\Modbus\\ModBusTest\\ModBusTest\\agent_config.ini")
+        public static void SendDataWithIniSettings(byte[] data, string iniFilePath = "E:\\modbus\\ModBusTest\\ModbusTest\\agent_config.ini")
         {
             CommSettings settings = LoadSettings(iniFilePath);
             SendData(data, settings);
@@ -160,8 +160,8 @@ namespace ModbusServer
                 COPYDATASTRUCT cds = new COPYDATASTRUCT
                 {
                     dwData = (IntPtr)1, // 임의의 식별자
-                    cbData = data.Length,
-                    lpData = dataHandle.AddrOfPinnedObject()
+                    cbData = data.Length, // 데이터 길이
+                    lpData = dataHandle.AddrOfPinnedObject() // 실제 데이터 메모리 주소
                 };
 
                 IntPtr cdsBuffer = Marshal.AllocHGlobal(Marshal.SizeOf(cds));
@@ -170,6 +170,14 @@ namespace ModbusServer
                 SendMessage(hwnd, WM_COPYDATA, IntPtr.Zero, cdsBuffer);
 
                 Marshal.FreeHGlobal(cdsBuffer);
+            }
+            catch (OutOfMemoryException ex)
+            {
+                Console.WriteLine("메모리 할당 실패: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("메모리 작업 중 오류 발생: " + ex.Message);
             }
             finally
             {

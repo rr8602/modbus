@@ -1,6 +1,6 @@
 ﻿namespace ModbusServer
 {
-    partial class main_form
+    partial class MainForm
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -288,7 +288,7 @@
             this.txt_speed2.TabIndex = 29;
             this.txt_speed2.TabStop = false;
             // 
-            // main_form
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -320,7 +320,7 @@
             this.Controls.Add(this.lbl_roller3);
             this.Controls.Add(this.lbl_roller2);
             this.Controls.Add(this.lbl_roller1);
-            this.Name = "main_form";
+            this.Name = "MainForm";
             this.Text = "Agent";
             this.ResumeLayout(false);
             this.PerformLayout();
