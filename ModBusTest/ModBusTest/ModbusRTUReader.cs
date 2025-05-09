@@ -3,7 +3,7 @@ using System.IO.Ports;
 
 using Modbus.Device;
 
-namespace ModBusTest
+namespace ModbusServer
 {
     public class ModbusRTUReader
     {

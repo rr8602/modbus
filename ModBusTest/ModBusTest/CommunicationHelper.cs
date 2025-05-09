@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace ModBusTest
+namespace ModbusServer
 {
     public class CommunicationHelper
     {

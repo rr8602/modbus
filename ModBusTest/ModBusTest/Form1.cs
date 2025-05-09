@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.IO.Ports;
 using System.Linq;
 
-namespace ModBusTest
+namespace ModbusServer
 {
     public partial class main_form : Form
     {
@@ -64,6 +64,7 @@ namespace ModBusTest
         }
 
         // 속도 값 실시간 갱신
+        // 속도 값 실시간 갱신
         private void UpdateSpeedValue(object sender, EventArgs e)
         {
             try
@@ -74,6 +75,30 @@ namespace ModBusTest
                 {
                     Controls["txt_speed" + (i + 1)].Text = boardValues[i + 13].ToString();
                 }
+
+                // 10바이트 데이터 생성
+                byte[] dataToSend = new byte[10];
+
+                // Byte 0 = STX (0x02)
+                dataToSend[0] = 0x02;
+
+                // Byte 1-2 = Speed1 (0-65535)
+                BitConverter.GetBytes(boardValues[13]).CopyTo(dataToSend, 1);
+
+                // Byte 3-4 = Speed2 (0-65535)
+                BitConverter.GetBytes(boardValues[14]).CopyTo(dataToSend, 3);
+
+                // Byte 5-6 = Speed3 (0-65535)
+                BitConverter.GetBytes(boardValues[15]).CopyTo(dataToSend, 5);
+
+                // Byte 7-8 = Speed4 (0-65535)
+                BitConverter.GetBytes(boardValues[16]).CopyTo(dataToSend, 7);
+
+                // Byte 9 = ETX (0x03)
+                dataToSend[9] = 0x03;
+
+                // INI 파일에서 설정을 자동으로 로드하고 데이터 전송
+                CommunicationHelper.SendDataWithIniSettings(dataToSend);
             }
             catch (TimeoutException ex)
             {

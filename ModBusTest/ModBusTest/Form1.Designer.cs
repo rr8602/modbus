@@ -1,4 +1,4 @@
-﻿namespace ModBusTest
+﻿namespace ModbusServer
 {
     partial class main_form
     {
