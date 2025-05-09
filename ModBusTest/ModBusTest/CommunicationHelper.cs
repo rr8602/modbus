@@ -3,13 +3,9 @@ using System.IO;
 using System.Windows.Forms;
 using IniParser.Model;
 using IniParser;
-using System.Threading.Tasks;
-using System.IO.Ports;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace ModBusTest
 {
@@ -30,23 +26,78 @@ namespace ModBusTest
             SendMessage
         }
 
-        // 데이터 전송 메서드
-        public static void SendData(CommType commType, byte[] data, string ipAddress = "127.0.0.1", int port = 8888, string targetWindow = "MainProgram")
+        // 통신 설정 클래스
+        public class CommSettings
+        {
+            public CommType Type { get; set; }
+            public string ServerIP { get; set; } = "127.0.0.1";
+            public int ServerPort { get; set; } = 8888;
+            public string TargetWindowName { get; set; } = "ModbusClient";
+        }
+
+        // INI 파일에서 설정 로드
+        public static CommSettings LoadSettings(string iniFilePath = "C:\\Modbus\\ModBusTest\\ModBusTest\\agent_config.ini")
+        {
+            CommSettings settings = new CommSettings();
+
+            try
+            {
+                if (File.Exists(iniFilePath))
+                {
+                    var parser = new FileIniDataParser();
+                    IniData data = parser.ReadFile(iniFilePath);
+
+                    string commTypeSetting = data["Comm"]["CommunicationType"] ?? "TCP";
+
+                    // 통신 타입 설정
+                    switch (commTypeSetting.ToUpper())
+                    {
+                        case "TCP":
+                            settings.Type = CommType.TCP;
+                            break;
+                        case "UDP":
+                            settings.Type = CommType.UDP;
+                            break;
+                        case "SENDMESSAGE":
+                            settings.Type = CommType.SendMessage;
+                            break;
+                        default:
+                            settings.Type = CommType.TCP;
+                            break;
+                    }
+
+                    // 추가 설정 로드
+                    settings.ServerIP = data["Comm"]["ServerIP"] ?? settings.ServerIP;
+                    settings.ServerPort = int.TryParse(data["Comm"]["ServerPort"], out int port) ? port : settings.ServerPort;
+                    settings.TargetWindowName = data["Comm"]["TargetWindowName"] ?? settings.TargetWindowName;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"설정 로드 실패: {ex.Message}");
+                // 기본 설정 유지
+            }
+
+            return settings;
+        }
+
+        // 데이터 전송 메서드 (설정 객체 사용)
+        public static void SendData(byte[] data, CommSettings settings)
         {
             try
             {
-                switch (commType)
+                switch (settings.Type)
                 {
                     case CommType.TCP:
-                        SendViaTCP(ipAddress, port, data);
+                        SendViaTCP(settings.ServerIP, settings.ServerPort, data);
                         break;
 
                     case CommType.UDP:
-                        SendViaUDP(ipAddress, port, data);
+                        SendViaUDP(settings.ServerIP, settings.ServerPort, data);
                         break;
 
                     case CommType.SendMessage:
-                        SendViaWindowsMessage(targetWindow, data);
+                        SendViaWindowsMessage(settings.TargetWindowName, data);
                         break;
                 }
             }
@@ -55,6 +106,13 @@ namespace ModBusTest
                 Console.WriteLine($"데이터 전송 중 오류 발생: {ex.Message}");
                 throw;
             }
+        }
+
+        // 간편하게 INI 파일에서 설정을 로드하고 데이터 전송
+        public static void SendDataWithIniSettings(byte[] data, string iniFilePath = "C:\\Modbus\\ModBusTest\\ModBusTest\\agent_config.ini")
+        {
+            CommSettings settings = LoadSettings(iniFilePath);
+            SendData(data, settings);
         }
 
         // TCP 전송 메서드
