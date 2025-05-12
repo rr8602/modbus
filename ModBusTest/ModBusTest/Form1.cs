@@ -11,7 +11,7 @@ namespace ModbusServer
 {
     public partial class MainForm : Form
     {
-        private readonly ModbusRTUReader modbusReader;
+        private readonly ModbusRTUReader modbusReader = new ModbusRTUReader();
         private readonly Timer updateTimer;
 
         private CommunicationHelper.CommSettings cachedSettings = null;
@@ -29,8 +29,6 @@ namespace ModbusServer
 
             cmbCommType.SelectedIndex = 0;
 
-            modbusReader = new ModbusRTUReader();
-
             foreach (Control ctrl in this.Controls)
             {
                 if (ctrl is TextBox &&
@@ -38,6 +36,7 @@ namespace ModbusServer
                 {
                     ((TextBox)ctrl).KeyPress += NumericTextBox_KeyPress;
                     ((TextBox)ctrl).Enter += TextBox_Enter;
+                    ((TextBox)ctrl).SelectAll();
                     ((TextBox)ctrl).Leave += TextBox_Leave;
                 }
             }
@@ -197,6 +196,33 @@ namespace ModbusServer
 
                 UpdateIniFile(valuesToWrite);
 
+                if (modbusCommunicationEnabled)
+                {
+                    try
+                    {
+                        modbusReader.ReopenPort("COM3");
+                        Console.WriteLine("COM3 포트에 즉시 접근 시도 완료 (값 적용)");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"COM3 포트 재오픈 실패(값 적용): {ex.Message}");
+                    }
+                }
+
+                // Modbus RTU가 활성화된 경우 포트 재오픈 시도
+                if (modbusCommunicationEnabled)
+                {
+                    try
+                    {
+                        ModbusRTUReader reader = new ModbusRTUReader();
+                        Console.WriteLine("COM3 포트에 즉시 접근 시도 완료 (값 적용)");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"COM3 포트 재오픈 실패(값 적용): {ex.Message}");
+                    }
+                }
+
                 MessageBox.Show("Board에 값을 성공적으로 반영했습니다.");
             }
             catch (Exception ex)
@@ -285,6 +311,19 @@ namespace ModbusServer
         private void cmbCommType_SelectedIndexChanged(object sender, EventArgs e)
         {
             string selectedType = cmbCommType.SelectedItem.ToString().ToUpper();
+
+            if (modbusCommunicationEnabled)
+            {
+                try
+                {
+                    modbusReader.ReopenPort("COM3");
+                    Console.WriteLine("COM3 포트에 즉시 접근 시도 완료");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"COM3 포트 재오픈 실패: {ex.Message}");
+                }
+            }
 
             // SendMessage일 때만 Modbus RTU 통신 비활성화
             modbusCommunicationEnabled = (selectedType != "SENDMESSAGE");

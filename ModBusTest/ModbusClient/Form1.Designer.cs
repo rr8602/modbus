@@ -55,7 +55,7 @@
             // lbl_speed3
             // 
             this.lbl_speed3.AutoSize = true;
-            this.lbl_speed3.Location = new System.Drawing.Point(34, 117);
+            this.lbl_speed3.Location = new System.Drawing.Point(34, 102);
             this.lbl_speed3.Name = "lbl_speed3";
             this.lbl_speed3.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed3.TabIndex = 2;
@@ -64,7 +64,7 @@
             // lbl_speed4
             // 
             this.lbl_speed4.AutoSize = true;
-            this.lbl_speed4.Location = new System.Drawing.Point(34, 153);
+            this.lbl_speed4.Location = new System.Drawing.Point(34, 135);
             this.lbl_speed4.Name = "lbl_speed4";
             this.lbl_speed4.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed4.TabIndex = 3;

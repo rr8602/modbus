@@ -9,11 +9,50 @@ namespace ModbusServer
     {
         private readonly string portName;
         private readonly int baudRate;
+        private SerialPort serialPort;
 
         public ModbusRTUReader(string portName = "COM3", int baudRate = 115200)
         {
             this.portName = portName;
             this.baudRate = baudRate;
+
+            serialPort = new SerialPort
+            {
+                PortName = portName,
+                BaudRate = baudRate,
+                Parity = Parity.None,
+                DataBits = 8,
+                StopBits = StopBits.One,
+                ReadTimeout = 1000,
+                WriteTimeout = 1000
+            };
+
+            serialPort.Open();
+        }
+
+        public void ReopenPort(string portName)
+        {
+            if (serialPort != null)
+            {
+                if (serialPort.IsOpen)
+                    serialPort.Close();
+
+                serialPort.PortName = portName;
+            }
+            else
+            {
+                serialPort = new SerialPort
+                {
+                    PortName = portName,
+                    BaudRate = baudRate,
+                    Parity = Parity.None,
+                    DataBits = 8,
+                    StopBits = StopBits.One,
+                    ReadTimeout = 1000,
+                    WriteTimeout = 1000
+                };
+            }
+            serialPort.Open();
         }
 
         // Board에서 값 읽기
@@ -21,26 +60,14 @@ namespace ModbusServer
         {
             try
             {
-                using (SerialPort serialPort = new SerialPort(portName))
-                {
-                    serialPort.BaudRate = baudRate;
-                    serialPort.DataBits = 8;
-                    serialPort.Parity = Parity.None;
-                    serialPort.StopBits = StopBits.One;
+                EnsurePortOpen();
+                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(serialPort);
 
-                    serialPort.Open();
-                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(serialPort);
+                byte slaveId = 1;
+                ushort startAddress = 0;
+                ushort numRegisters = 20;
 
-                    byte slaveId = 1; // Slave ID
-                    ushort startAddress = 0; // 시작 주소
-                    ushort numRegisters = 20; // 읽을 레지스터 개수
-
-                    // Modbus RTU를 통해 Holding Registers 읽기
-                    ushort[] sensorValues = master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
-
-                    serialPort.Close();
-                    return sensorValues;
-                }
+                return master.ReadHoldingRegisters(slaveId, startAddress, numRegisters);
             }
             catch (Exception ex)
             {
@@ -54,29 +81,38 @@ namespace ModbusServer
         {
             try
             {
-                using (SerialPort serialPort = new SerialPort(portName))
-                {
-                    serialPort.BaudRate = baudRate;
-                    serialPort.DataBits = 8;
-                    serialPort.Parity = Parity.None;
-                    serialPort.StopBits = StopBits.One;
+                EnsurePortOpen();
+                IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(serialPort);
 
-                    serialPort.Open();
-                    IModbusSerialMaster master = ModbusSerialMaster.CreateRtu(serialPort);
+                byte slaveId = 1;
+                ushort startAddress = 1;
 
-                    byte slaveId = 1; // Slave ID
-                    ushort startAddress = 1; // 시작 주소 (Modbus 주소 1)
-
-                    // Modbus RTU를 통해 Holding Registers 쓰기
-                    master.WriteMultipleRegisters(slaveId, startAddress, valuesToWrite);
-
-                    serialPort.Close();
-                }
+                master.WriteMultipleRegisters(slaveId, startAddress, valuesToWrite);
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Modbus 통신 오류: {ex.Message}");
                 throw;
+            }
+        }
+
+        private void EnsurePortOpen()
+        {
+            if (serialPort == null)
+                throw new InvalidOperationException("SerialPort가 초기화되지 않았습니다.");
+
+            if (!serialPort.IsOpen)
+                serialPort.Open();
+        }
+
+        public void Dispose()
+        {
+            if (serialPort != null)
+            {
+                if (serialPort.IsOpen)
+                    serialPort.Close();
+                serialPort.Dispose();
+                serialPort = null;
             }
         }
     }

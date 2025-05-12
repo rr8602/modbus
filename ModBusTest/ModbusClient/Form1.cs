@@ -50,19 +50,6 @@ namespace ModbusClient
 
         private void InitializeUI()
         {
-            // UI 초기화 코드...
-            speedLabels = new Label[4];
-            for (int i = 0; i < 4; i++)
-            {
-                speedLabels[i] = new Label
-                {
-                    Location = new System.Drawing.Point(20, 20 + i * 30),
-                    Size = new System.Drawing.Size(200, 20),
-                    Text = $"Speed {i + 1}: 0"
-                };
-                this.Controls.Add(speedLabels[i]);
-            }
-
             // 로그 표시용 텍스트 박스
             logTextBox = new TextBox
             {
@@ -81,9 +68,11 @@ namespace ModbusClient
             StartTcpListener();
             StartUdpListener();
 
+            LogMessage("리스너가 시작되었습니다 (포트: 8888)");
+
             // 로그 메시지
             LogMessage("ModbusClient 시작됨");
-            LogMessage("TCP 연결 대기 중 (포트: 8888)");
+            LogMessage("연결 대기 중 (포트: 8888)");
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -104,7 +93,6 @@ namespace ModbusClient
                 tcpListener.Start();
 
                 isTcpListening = true;
-                LogMessage("TCP 리스너가 시작되었습니다 (포트: 8888)");
 
                 // 취소 토큰 생성
                 tcpCancellationTokenSource = new CancellationTokenSource();
@@ -146,7 +134,7 @@ namespace ModbusClient
                 {
                     // 연결 대기
                     TcpClient client = await tcpListener.AcceptTcpClientAsync();
-                    LogMessage($"ModbusServer에서 연결 수신: {((IPEndPoint)client.Client.RemoteEndPoint).Address}");
+                    LogMessage($"ModbusServer에서 TCP 연결 수신: {((IPEndPoint)client.Client.RemoteEndPoint).Address}, 크기: {client.ReceiveBufferSize}");
 
                     // 클라이언트 처리를 별도 태스크로 시작
                     _ = HandleClientAsync(client, cancellationToken);
@@ -220,12 +208,12 @@ namespace ModbusClient
                 ushort speed4 = BitConverter.ToUInt16(data, 7);
 
                 // 모든 속도값 UI에 업데이트
-                if (lbl_speed1 != null) lbl_speed1.Text = $"Speed 1: {speed1}";
-                if (lbl_speed2 != null) lbl_speed2.Text = $"Speed 2: {speed2}";
-                if (lbl_speed3 != null) lbl_speed3.Text = $"Speed 3: {speed3}";
-                if (lbl_speed4 != null) lbl_speed4.Text = $"Speed 4: {speed4}";
+                if (lbl_speed1 != null) lbl_speed1.Text = $"속도 1: {speed1}";
+                if (lbl_speed2 != null) lbl_speed2.Text = $"속도 2: {speed2}";
+                if (lbl_speed3 != null) lbl_speed3.Text = $"속도 3: {speed3}";
+                if (lbl_speed4 != null) lbl_speed4.Text = $"속도 4: {speed4}";
 
-                LogMessage($"수신 데이터: Speed1={speed1}, Speed2={speed2}, Speed3={speed3}, Speed4={speed4}");
+                LogMessage($"수신 데이터: 속도1={speed1}, 속도2={speed2}, 속도3={speed3}, 속도4={speed4}");
             }
             catch (Exception ex)
             {
@@ -246,6 +234,8 @@ namespace ModbusClient
                     {
                         byte[] data = new byte[cds.cbData];
                         Marshal.Copy(cds.lpData, data, 0, cds.cbData);
+
+                        LogMessage($"ModbusServer에서 SendMessage 연결 수신: { cds.lpData }, 크기: { cds.cbData }");
 
                         // 수신된 데이터 처리
                         ProcessReceivedData(data);
@@ -274,7 +264,6 @@ namespace ModbusClient
                 // UDP 리스너 생성
                 udpClient = new UdpClient(8888);
                 isUdpListening = true;
-                LogMessage("UDP 리스너가 시작되었습니다 (포트: 8888)");
 
                 // 취소 토큰 생성
                 udpCancellationTokenSource = new CancellationTokenSource();
@@ -334,7 +323,7 @@ namespace ModbusClient
                     // 정상 수신 처리
                     UdpReceiveResult result = await receiveTask;
 
-                    LogMessage($"UDP 데이터 수신: {result.RemoteEndPoint.Address}, 크기: {result.Buffer.Length}바이트");
+                    LogMessage($"ModbusServer에서 UDP 연결 수신: {result.RemoteEndPoint.Address}, 크기: {result.Buffer.Length}바이트");
 
                     // UI 스레드에서 데이터 처리
                     this.BeginInvoke(new Action<byte[]>(ProcessReceivedData), result.Buffer);
