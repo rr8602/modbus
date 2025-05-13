@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusServer", "ModBusTest\ModbusServer.csproj", "{B94C67D4-578F-4918-A2C7-4E318328D854}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusClient", "ModbusClient\ModbusClient.csproj", "{3FB70A20-5B1D-4909-922D-A67DC39B6772}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ModbusServer", "ModbusServer\ModbusServer.csproj", "{B94C67D4-578F-4918-A2C7-4E318328D854}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace ModbusServer
+namespace ModbusClient
 {
     public class CommunicationHelper
     {
@@ -32,11 +32,11 @@ namespace ModbusServer
             public CommType Type { get; set; }
             public string ServerIP { get; set; } = "127.0.0.1";
             public int ServerPort { get; set; } = 8888;
-            public string TargetWindowName { get; set; } = "ModbusClient";
+            public string TargetWindowName { get; set; } = "ModbusServer";
         }
 
         // INI 파일에서 설정 로드
-        public static CommSettings LoadSettings(string iniFilePath = "E:\\modbus\\ModBusTest\\ModbusTest\\agent_config.ini")
+        public static CommSettings LoadSettings(string iniFilePath = "E:\\modbus\\ModBusTest\\ModbusClient\\agent_config.ini")
         {
             CommSettings settings = new CommSettings();
 

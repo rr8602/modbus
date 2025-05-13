@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 using Modbus.Device;
 
-namespace ModbusServer
+namespace ModbusClient
 {
     public class ModbusRTUReader
     {

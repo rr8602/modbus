@@ -3,20 +3,20 @@
   "WorkspaceRootPath": "E:\\modbus\\ModBusTest\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|e:\\modbus\\modbustest\\modbustest\\communicationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|solutionrelative:modbustest\\communicationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|e:\\modbus\\modbustest\\modbusclient\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|solutionrelative:modbusclient\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|e:\\modbus\\modbustest\\modbustest\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|solutionrelative:modbustest\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|e:\\modbus\\modbustest\\modbusclient\\communicationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|solutionrelative:modbusclient\\communicationhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|e:\\modbus\\modbustest\\modbustest\\modbusrtureader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|solutionrelative:modbustest\\modbusrtureader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|e:\\modbus\\modbustest\\modbusclient\\modbusrtureader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|solutionrelative:modbusclient\\modbusrtureader.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|e:\\modbus\\modbustest\\modbustest\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
-      "RelativeMoniker": "D:0:0:{B94C67D4-578F-4918-A2C7-4E318328D854}|ModBusTest\\ModbusServer.csproj|solutionrelative:modbustest\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+      "AbsoluteMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|e:\\modbus\\modbustest\\modbusclient\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{3FB70A20-5B1D-4909-922D-A67DC39B6772}|ModbusClient\\ModbusClient.csproj|solutionrelative:modbusclient\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     }
   ],
   "DocumentGroupContainers": [
@@ -26,25 +26,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 3,
           "Children": [
-            {
-              "$type": "Bookmark",
-              "Name": "ST:131:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "CommunicationHelper.cs",
-              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusTest\\CommunicationHelper.cs",
-              "RelativeDocumentMoniker": "ModbusTest\\CommunicationHelper.cs",
-              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusTest\\CommunicationHelper.cs",
-              "RelativeToolTip": "ModbusTest\\CommunicationHelper.cs",
-              "ViewState": "AgIAAFkAAAAAAAAAAAAYwHQAAAAsAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-13T04:22:19.048Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
@@ -53,38 +36,51 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "ModbusRTUReader.cs",
-              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusTest\\ModbusRTUReader.cs",
-              "RelativeDocumentMoniker": "ModbusTest\\ModbusRTUReader.cs",
-              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusTest\\ModbusRTUReader.cs",
-              "RelativeToolTip": "ModbusTest\\ModbusRTUReader.cs",
-              "ViewState": "AgIAABcAAAAAAAAAAAAmwCwAAAARAAAAAAAAAA==",
+              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusClient\\ModbusRTUReader.cs",
+              "RelativeDocumentMoniker": "ModbusClient\\ModbusRTUReader.cs",
+              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusClient\\ModbusRTUReader.cs",
+              "RelativeToolTip": "ModbusClient\\ModbusRTUReader.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAiwFkAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T23:32:37.174Z",
+              "WhenOpened": "2025-05-13T05:41:27.543Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Form1.cs",
-              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusTest\\Form1.cs",
-              "RelativeDocumentMoniker": "ModbusTest\\Form1.cs",
-              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusTest\\Form1.cs",
-              "RelativeToolTip": "ModbusTest\\Form1.cs",
-              "ViewState": "AgIAAPMAAAAAAAAAAAAnwAsBAAA4AAAAAAAAAA==",
+              "Title": "CommunicationHelper.cs",
+              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusClient\\CommunicationHelper.cs",
+              "RelativeDocumentMoniker": "ModbusClient\\CommunicationHelper.cs",
+              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusClient\\CommunicationHelper.cs",
+              "RelativeToolTip": "ModbusClient\\CommunicationHelper.cs",
+              "ViewState": "AgIAAH4AAAAAAAAAAAAvwJkAAABNAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T23:27:41.777Z",
+              "WhenOpened": "2025-05-13T05:41:22.215Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusClient\\Form1.cs",
+              "RelativeDocumentMoniker": "ModbusClient\\Form1.cs",
+              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusClient\\Form1.cs",
+              "RelativeToolTip": "ModbusClient\\Form1.cs",
+              "ViewState": "AgIAAMEAAAAAAAAAAAAawNcAAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-13T05:40:31.034Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Form1.cs [\uB514\uC790\uC778]",
-              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusTest\\Form1.cs",
-              "RelativeDocumentMoniker": "ModbusTest\\Form1.cs",
-              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusTest\\Form1.cs [\uB514\uC790\uC778]",
-              "RelativeToolTip": "ModbusTest\\Form1.cs [\uB514\uC790\uC778]",
+              "DocumentMoniker": "E:\\modbus\\ModBusTest\\ModbusClient\\Form1.cs",
+              "RelativeDocumentMoniker": "ModbusClient\\Form1.cs",
+              "ToolTip": "E:\\modbus\\ModBusTest\\ModbusClient\\Form1.cs [\uB514\uC790\uC778]",
+              "RelativeToolTip": "ModbusClient\\Form1.cs [\uB514\uC790\uC778]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-12T23:27:41.707Z",
+              "WhenOpened": "2025-05-13T05:40:30.678Z",
               "EditorCaption": " [\uB514\uC790\uC778]"
             }
           ]
