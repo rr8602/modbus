@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
+using System.Windows.Forms;
 
 using Modbus.Device;
 
@@ -11,7 +12,7 @@ namespace ModbusServer
         private readonly int baudRate;
         private SerialPort serialPort;
 
-        public ModbusRTUReader(string portName = "COM3", int baudRate = 115200)
+        public ModbusRTUReader(string portName, int baudRate = 115200)
         {
             this.portName = portName;
             this.baudRate = baudRate;
@@ -23,36 +24,42 @@ namespace ModbusServer
                 Parity = Parity.None,
                 DataBits = 8,
                 StopBits = StopBits.One,
-                ReadTimeout = 1000,
-                WriteTimeout = 1000
+                ReadTimeout = 100,
+                WriteTimeout = 100
             };
-
-            serialPort.Open();
         }
 
         public void ReopenPort(string portName)
         {
-            if (serialPort != null)
-            {
-                if (serialPort.IsOpen)
-                    serialPort.Close();
 
-                serialPort.PortName = portName;
-            }
-            else
+            try
             {
-                serialPort = new SerialPort
+                if (serialPort != null)
                 {
-                    PortName = portName,
-                    BaudRate = baudRate,
-                    Parity = Parity.None,
-                    DataBits = 8,
-                    StopBits = StopBits.One,
-                    ReadTimeout = 1000,
-                    WriteTimeout = 1000
-                };
+                    if (serialPort.IsOpen)
+                        serialPort.Close();
+
+                    serialPort.PortName = portName;
+                }
+                else
+                {
+                    serialPort = new SerialPort
+                    {
+                        PortName = portName,
+                        BaudRate = baudRate,
+                        Parity = Parity.None,
+                        DataBits = 8,
+                        StopBits = StopBits.One,
+                        ReadTimeout = 100,
+                        WriteTimeout = 100
+                    };
+                }
+                serialPort.Open();
             }
-            serialPort.Open();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"시리얼 포트({portName}) 오픈 실패: {ex.Message}");
+            }
         }
 
         // Board에서 값 읽기
@@ -72,7 +79,8 @@ namespace ModbusServer
             catch (Exception ex)
             {
                 Console.WriteLine($"Modbus 통신 오류: {ex.Message}");
-                throw;
+
+                return null;
             }
         }
 
@@ -98,11 +106,18 @@ namespace ModbusServer
 
         private void EnsurePortOpen()
         {
-            if (serialPort == null)
-                throw new InvalidOperationException("SerialPort가 초기화되지 않았습니다.");
+            try
+            {
+                if (serialPort == null)
+                    throw new InvalidOperationException("SerialPort가 초기화되지 않았습니다.");
 
-            if (!serialPort.IsOpen)
-                serialPort.Open();
+                if (!serialPort.IsOpen)
+                    serialPort.Open();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"시리얼 포트({portName}) 오픈 실패: {ex.Message}");
+            }
         }
 
         public void Dispose()

@@ -11,77 +11,186 @@ namespace ModbusServer
 {
     public partial class MainForm : Form
     {
-        private readonly ModbusRTUReader modbusReader = new ModbusRTUReader();
-        private readonly Timer updateTimer;
+        private ModbusRTUReader modbusReader;
+        private Timer updateTimer;
 
         private CommunicationHelper.CommSettings cachedSettings = null;
         private DateTime lastSettingsLoadTime = DateTime.MinValue;
         private ushort[] lastBoardValues = null;
-        private bool isDataChanged = false;
 
         private bool modbusCommunicationEnabled = true;
 
         public MainForm()
         {
             InitializeComponent();
+            UpdatePortList();
+
+            updateTimer = new Timer();
+            updateTimer.Interval = 100;
+            updateTimer.Tick += UpdateSpeedValue;
 
             cmbCommType.SelectedIndexChanged += cmbCommType_SelectedIndexChanged;
+            cmb_port.SelectedIndexChanged += async (s, e) => await cmb_port_SelectedIndexChanged(s, e);
 
             cmbCommType.SelectedIndex = 0;
-
-            foreach (Control ctrl in this.Controls)
-            {
-                if (ctrl is TextBox &&
-                   (ctrl.Name.StartsWith("txt_roller") || ctrl.Name.StartsWith("txt_encoder")))
-                {
-                    ((TextBox)ctrl).KeyPress += NumericTextBox_KeyPress;
-                    ((TextBox)ctrl).Enter += TextBox_Enter;
-                    ((TextBox)ctrl).SelectAll();
-                    ((TextBox)ctrl).Leave += TextBox_Leave;
-                }
-            }
 
             // 모드버스 활성화 상태 초기화 (TCP가 기본값)
             string initialCommType = cmbCommType.SelectedItem.ToString();
             modbusCommunicationEnabled = (initialCommType.ToUpper() != "SENDMESSAGE");
             Console.WriteLine($"초기 통신 방식: {initialCommType}, Modbus RTU 활성화: {modbusCommunicationEnabled}");
 
-            UpdateBoardValues(this, EventArgs.Empty);
+            
+        }
 
-            updateTimer = new Timer();
-            updateTimer.Interval = 100;
-            updateTimer.Tick += UpdateSpeedValue;
-            updateTimer.Start();
+        private async Task cmb_port_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string selectedPort = cmb_port.SelectedItem?.ToString();
+
+            // 기존 인스턴스가 있으면 반드시 Dispose
+            if (modbusReader != null)
+            {
+                try { modbusReader.Dispose(); } catch { }
+
+                modbusReader = null;
+            }
+
+            if (updateTimer != null && updateTimer.Enabled)
+                updateTimer.Stop();
+
+            try
+            {
+                modbusReader = new ModbusRTUReader(selectedPort);
+                lastBoardValues = null;
+
+                // 실제 Board와 통신 시도
+                ushort[] boardValues = null;
+
+                try
+                {
+                    boardValues = modbusReader.ReadSensorValues();
+                }
+                catch
+                {
+                    // 통신 실패 시 비정상 포트로 간주
+                    boardValues = null;
+                }
+
+                if (boardValues == null)
+                {
+                    ClearTextBoxes();
+                    modbusReader = null;
+                    lastBoardValues = null;
+
+                    return;
+                }
+
+                await UpdateBoardValues(this, EventArgs.Empty);
+
+                if (updateTimer != null && !updateTimer.Enabled)
+                    updateTimer.Start();
+            }
+            catch
+            {
+                ClearTextBoxes();
+                modbusReader = null;
+                lastBoardValues = null;
+
+                if (updateTimer != null && updateTimer.Enabled)
+                    updateTimer.Stop();
+            }
+        }
+
+        private void ClearTextBoxes()
+        {
+            this.SuspendLayout();
+
+            for (int i = 1; i <= 4; i++)
+            {
+                var roller = Controls["txt_roller" + i] as TextBox;
+                var encoder = Controls["txt_encoder" + i] as TextBox;
+                var speed = Controls["txt_speed" + i] as TextBox;
+
+                if (roller != null)
+                {
+                    roller.KeyPress -= NumericTextBox_KeyPress;
+                    roller.Enter -= TextBox_Enter;
+                    roller.Leave -= TextBox_Leave;
+                    roller.Text = "";
+                    roller.KeyPress += NumericTextBox_KeyPress;
+                    roller.Enter += TextBox_Enter;
+                    roller.Leave += TextBox_Leave;
+                }
+                if (encoder != null)
+                {
+                    encoder.KeyPress -= NumericTextBox_KeyPress;
+                    encoder.Enter -= TextBox_Enter;
+                    encoder.Leave -= TextBox_Leave;
+                    encoder.Text = "";
+                    encoder.KeyPress += NumericTextBox_KeyPress;
+                    encoder.Enter += TextBox_Enter;
+                    encoder.Leave += TextBox_Leave;
+                }
+                if (speed != null)
+                {
+                    speed.Text = "";
+                }
+            }
+
+            this.ResumeLayout();
+        }
+
+        // 활성화된(연결 가능한) 포트 목록 Get
+        private void UpdatePortList()
+        {
+            string[] ports = SerialPort.GetPortNames();
+
+            cmb_port.Items.Clear();
+
+            if (ports.Length == 0)
+            {
+                cmb_port.Items.Add("사용 가능한 포트 없음");
+                cmb_port.SelectedIndex = 0;
+            }
+            else
+            {
+                cmb_port.Items.AddRange(ports);
+                cmb_port.SelectedIndex = 0;
+            }
         }
 
         // Board에서 값 읽어와 UI 업데이트
-        private void UpdateBoardValues(object sender, EventArgs e)
+        private async Task UpdateBoardValues(object sender, EventArgs e)
         {
+            if (modbusReader == null)
+                return;
+
             try
             {
-                ushort[] boardValues = modbusReader.ReadSensorValues();
+                ushort[] boardValues = await Task.Run(() => modbusReader.ReadSensorValues());
 
-                if (boardValues.Length >= 12)
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        Controls["txt_roller" + (i + 1)].Text = boardValues[i + 1].ToString();
-                        Controls["txt_encoder" + (i + 1)].Text = boardValues[i + 5].ToString();
-                    }
+                    Controls["txt_roller" + (i + 1)].Text = boardValues[i + 1].ToString();
+                    Controls["txt_encoder" + (i + 1)].Text = boardValues[i + 5].ToString();
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Modbus 통신 오류: {ex.Message}");
-                throw;
+                ClearTextBoxes();
             }
         }
 
         // 속도 값 실시간 갱신
         private async void UpdateSpeedValue(object sender, EventArgs e)
         {
-            // 타이머 일시 중지
             updateTimer.Stop();
+
+            // modbusReader가 null이면 바로 리턴
+            if (modbusReader == null)
+            {
+                return;
+            }
 
             try
             {
@@ -173,15 +282,21 @@ namespace ModbusServer
             {
                 // 타이머 재시작 (폼이 아직 유효한 경우에만)
                 if (!IsDisposed && updateTimer != null)
-                {
                     updateTimer.Start();
-                }
             }
         }
 
         // 사용자 입력값을 Board에 update
         private void btn_writeToBoard_Click(object sender, EventArgs e)
         {
+            string selectedPort = cmb_port.SelectedItem.ToString();
+
+            if (modbusReader == null)
+            {
+                MessageBox.Show("Board와 연결된 포트를 먼저 선택하세요. 현재 선택한 포트는 Board와 연결되지 않은 포트 입니다.", "포트 연결 필요", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             try
             {
                 ushort[] valuesToWrite = new ushort[8]; // 롤러 값 4개 + 엔코더 값 4개
@@ -200,26 +315,12 @@ namespace ModbusServer
                 {
                     try
                     {
-                        modbusReader.ReopenPort("COM3");
-                        Console.WriteLine("COM3 포트에 즉시 접근 시도 완료 (값 적용)");
+                        modbusReader.ReopenPort(selectedPort);
+                        Console.WriteLine($"{selectedPort} 포트에 즉시 접근 시도 완료 (값 적용)");
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"COM3 포트 재오픈 실패(값 적용): {ex.Message}");
-                    }
-                }
-
-                // Modbus RTU가 활성화된 경우 포트 재오픈 시도
-                if (modbusCommunicationEnabled)
-                {
-                    try
-                    {
-                        ModbusRTUReader reader = new ModbusRTUReader();
-                        Console.WriteLine("COM3 포트에 즉시 접근 시도 완료 (값 적용)");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"COM3 포트 재오픈 실패(값 적용): {ex.Message}");
+                        Console.WriteLine($"{selectedPort} 포트 재오픈 실패(값 적용): {ex.Message}");
                     }
                 }
 
@@ -310,18 +411,22 @@ namespace ModbusServer
         // cmbCommType의 SelectedIndexChanged 이벤트 핸들러 추가
         private void cmbCommType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (modbusReader == null || cmb_port.SelectedItem == null)
+                return;
+
             string selectedType = cmbCommType.SelectedItem.ToString().ToUpper();
+            string selectedPort = cmb_port.SelectedItem.ToString();
 
             if (modbusCommunicationEnabled)
             {
                 try
                 {
-                    modbusReader.ReopenPort("COM3");
-                    Console.WriteLine("COM3 포트에 즉시 접근 시도 완료");
+                    modbusReader.ReopenPort(selectedPort);
+                    Console.WriteLine($"{selectedPort} 포트에 즉시 접근 시도 완료");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"COM3 포트 재오픈 실패: {ex.Message}");
+                    Console.WriteLine($"{selectedPort} 포트 재오픈 실패: {ex.Message}");
                 }
             }
 

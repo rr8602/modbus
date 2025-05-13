@@ -55,6 +55,8 @@
             this.txt_speed4 = new System.Windows.Forms.TextBox();
             this.txt_speed3 = new System.Windows.Forms.TextBox();
             this.txt_speed2 = new System.Windows.Forms.TextBox();
+            this.lbl_port = new System.Windows.Forms.Label();
+            this.cmb_port = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // lbl_roller1
@@ -208,7 +210,7 @@
             // 
             // btn_writeToBoard
             // 
-            this.btn_writeToBoard.Location = new System.Drawing.Point(29, 509);
+            this.btn_writeToBoard.Location = new System.Drawing.Point(29, 552);
             this.btn_writeToBoard.Name = "btn_writeToBoard";
             this.btn_writeToBoard.Size = new System.Drawing.Size(261, 58);
             this.btn_writeToBoard.TabIndex = 10;
@@ -219,7 +221,7 @@
             // lbl_speed2
             // 
             this.lbl_speed2.AutoSize = true;
-            this.lbl_speed2.Location = new System.Drawing.Point(26, 397);
+            this.lbl_speed2.Location = new System.Drawing.Point(26, 444);
             this.lbl_speed2.Name = "lbl_speed2";
             this.lbl_speed2.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed2.TabIndex = 22;
@@ -228,7 +230,7 @@
             // lbl_speed1
             // 
             this.lbl_speed1.AutoSize = true;
-            this.lbl_speed1.Location = new System.Drawing.Point(26, 368);
+            this.lbl_speed1.Location = new System.Drawing.Point(26, 415);
             this.lbl_speed1.Name = "lbl_speed1";
             this.lbl_speed1.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed1.TabIndex = 23;
@@ -237,7 +239,7 @@
             // lbl_speed4
             // 
             this.lbl_speed4.AutoSize = true;
-            this.lbl_speed4.Location = new System.Drawing.Point(26, 463);
+            this.lbl_speed4.Location = new System.Drawing.Point(26, 510);
             this.lbl_speed4.Name = "lbl_speed4";
             this.lbl_speed4.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed4.TabIndex = 24;
@@ -246,7 +248,7 @@
             // lbl_speed3
             // 
             this.lbl_speed3.AutoSize = true;
-            this.lbl_speed3.Location = new System.Drawing.Point(26, 431);
+            this.lbl_speed3.Location = new System.Drawing.Point(26, 478);
             this.lbl_speed3.Name = "lbl_speed3";
             this.lbl_speed3.Size = new System.Drawing.Size(50, 15);
             this.lbl_speed3.TabIndex = 25;
@@ -254,7 +256,7 @@
             // 
             // txt_speed1
             // 
-            this.txt_speed1.Location = new System.Drawing.Point(144, 365);
+            this.txt_speed1.Location = new System.Drawing.Point(144, 412);
             this.txt_speed1.Name = "txt_speed1";
             this.txt_speed1.ReadOnly = true;
             this.txt_speed1.Size = new System.Drawing.Size(146, 25);
@@ -263,7 +265,7 @@
             // 
             // txt_speed4
             // 
-            this.txt_speed4.Location = new System.Drawing.Point(144, 462);
+            this.txt_speed4.Location = new System.Drawing.Point(144, 509);
             this.txt_speed4.Name = "txt_speed4";
             this.txt_speed4.ReadOnly = true;
             this.txt_speed4.Size = new System.Drawing.Size(146, 25);
@@ -272,7 +274,7 @@
             // 
             // txt_speed3
             // 
-            this.txt_speed3.Location = new System.Drawing.Point(144, 431);
+            this.txt_speed3.Location = new System.Drawing.Point(144, 478);
             this.txt_speed3.Name = "txt_speed3";
             this.txt_speed3.ReadOnly = true;
             this.txt_speed3.Size = new System.Drawing.Size(146, 25);
@@ -281,18 +283,37 @@
             // 
             // txt_speed2
             // 
-            this.txt_speed2.Location = new System.Drawing.Point(144, 397);
+            this.txt_speed2.Location = new System.Drawing.Point(144, 444);
             this.txt_speed2.Name = "txt_speed2";
             this.txt_speed2.ReadOnly = true;
             this.txt_speed2.Size = new System.Drawing.Size(146, 25);
             this.txt_speed2.TabIndex = 29;
             this.txt_speed2.TabStop = false;
             // 
+            // lbl_port
+            // 
+            this.lbl_port.AutoSize = true;
+            this.lbl_port.Location = new System.Drawing.Point(26, 367);
+            this.lbl_port.Name = "lbl_port";
+            this.lbl_port.Size = new System.Drawing.Size(72, 15);
+            this.lbl_port.TabIndex = 30;
+            this.lbl_port.Text = "포트 선택";
+            // 
+            // cmb_port
+            // 
+            this.cmb_port.FormattingEnabled = true;
+            this.cmb_port.Location = new System.Drawing.Point(144, 367);
+            this.cmb_port.Name = "cmb_port";
+            this.cmb_port.Size = new System.Drawing.Size(146, 23);
+            this.cmb_port.TabIndex = 31;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(313, 598);
+            this.ClientSize = new System.Drawing.Size(313, 636);
+            this.Controls.Add(this.cmb_port);
+            this.Controls.Add(this.lbl_port);
             this.Controls.Add(this.txt_speed2);
             this.Controls.Add(this.txt_speed3);
             this.Controls.Add(this.txt_speed4);
@@ -356,6 +377,8 @@
         private System.Windows.Forms.TextBox txt_speed4;
         private System.Windows.Forms.TextBox txt_speed3;
         private System.Windows.Forms.TextBox txt_speed2;
+        private System.Windows.Forms.Label lbl_port;
+        private System.Windows.Forms.ComboBox cmb_port;
     }
 }
 

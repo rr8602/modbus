@@ -84,16 +84,19 @@ namespace ModbusServer
         // 데이터 전송 메서드 (설정 객체 사용)
         public static void SendData(byte[] data, CommSettings settings)
         {
+            TcpClient tcpClient = new TcpClient();
+            UdpClient udpClient = new UdpClient();
+
             try
             {
                 switch (settings.Type)
                 {
                     case CommType.TCP:
-                        SendViaTCP(settings.ServerIP, settings.ServerPort, data);
+                        SendViaTCP(tcpClient, settings.ServerIP, settings.ServerPort, data);
                         break;
 
                     case CommType.UDP:
-                        SendViaUDP(settings.ServerIP, settings.ServerPort, data);
+                        SendViaUDP(udpClient, settings.ServerIP, settings.ServerPort, data);
                         break;
 
                     case CommType.SendMessage:
@@ -108,36 +111,23 @@ namespace ModbusServer
             }
         }
 
-        // 간편하게 INI 파일에서 설정을 로드하고 데이터 전송
-        public static void SendDataWithIniSettings(byte[] data, string iniFilePath = "E:\\modbus\\ModBusTest\\ModbusTest\\agent_config.ini")
-        {
-            CommSettings settings = LoadSettings(iniFilePath);
-            SendData(data, settings);
-        }
-
         // TCP 전송 메서드
-        private static void SendViaTCP(string ipAddress, int port, byte[] data)
+        private static void SendViaTCP(TcpClient client, string ipAddress, int port, byte[] data)
         {
-            using (TcpClient client = new TcpClient())
-            {
-                client.Connect(ipAddress, port);
+            client.Connect(ipAddress, port);
 
-                using (NetworkStream stream = client.GetStream())
-                {
-                    stream.Write(data, 0, data.Length);
-                    stream.Flush();
-                }
+            using (NetworkStream stream = client.GetStream())
+            {
+                stream.Write(data, 0, data.Length);
+                stream.Flush();
             }
         }
 
         // UDP 전송 메서드
-        private static void SendViaUDP(string ipAddress, int port, byte[] data)
+        private static void SendViaUDP(UdpClient client, string ipAddress, int port, byte[] data)
         {
-            using (UdpClient client = new UdpClient())
-            {
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
-                client.Send(data, data.Length, endPoint);
-            }
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Parse(ipAddress), port);
+            client.Send(data, data.Length, endPoint);
         }
 
         // SendMessage 전송 메서드
